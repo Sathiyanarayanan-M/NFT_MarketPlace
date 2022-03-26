@@ -1,31 +1,31 @@
-# name: React Test and Deploy Preview
+name: React Test and Deploy Preview
 
-# on: pull_request
+on: pull_request
 
-# jobs:
-#   build_and_preview:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
+jobs:
+  build_and_preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-#       - name: Setup Node
-#         uses: actions/setup-node@v1
-#         with:
-#           node-version: 16
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
 
-#       - name: Bootstrap Packages
-#         run: npx lerna bootstrap
+      - name: Install packages
+        run: npm i
 
-#       - name: Run Build
-#         env:
-#           VITE_CoinImageURI: ${{ secrets.COINIMAGEURI }}
-#         run: npx lerna run build
+      - name: Run Build
+        env:
+          VITE_CoinImageURI: ${{ secrets.COINIMAGEURI }}
+        run: npm run build
 
-#       - if: "${{ contains(github.event.pull_request.labels.*.name, 'preview') }}"
-#       - uses: FirebaseExtended/action-hosting-deploy@v0
-#         with:
-#           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-#           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_WEB3_NFT }}"
-#           projectId: web3-nft
-#           expires: 5h
+      - if: "${{ contains(github.event.pull_request.labels.*.name, 'preview') }}"
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_NFT_MARKET_6D945 }}"
+          projectId: nft-market-6d945
+          expires: 5h
