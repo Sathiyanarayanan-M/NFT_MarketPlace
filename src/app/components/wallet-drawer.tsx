@@ -19,8 +19,6 @@ export const WalletDrawer = (props: Mui.DrawerProps) => {
     );
   }, []);
 
-  console.log(wallet);
-
   return (
     <Mui.Drawer {...props}>
       <Mui.Box width={500} px={2} py={4}>
