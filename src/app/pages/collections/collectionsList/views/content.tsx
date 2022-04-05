@@ -1,10 +1,15 @@
 import * as Mui from "@mui/material";
 import * as Faker from "faker";
 import * as Components from "src/app/components";
+import * as Pages from "src/app/pages";
 
 export const Content = () => {
   const sampleArray = [...Array(10).keys()];
   const onSaleType = ["eth", "etc"];
+  const contractAddr = "0x61fce80d72363b731425c3a2a46a1a5fed9814b2";
+  const nftCollections = Pages.Collections.Hooks.getNFTCollections({
+    contractAddr,
+  });
   return (
     <Mui.Box>
       <Mui.Grid container spacing={2}>

@@ -1,5 +1,4 @@
 import * as Constants from "src/constants";
-import * as Alchemy from "@alch/alchemy-web3";
+import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
-const alchemyKey = Constants.Config.AlchemyKey;
-const web3 = Alchemy.createAlchemyWeb3(alchemyKey);
+// export const Web3Provider = createAlchemyWeb3(Constants.Config.AlchemyKey);
