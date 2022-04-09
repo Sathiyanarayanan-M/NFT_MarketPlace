@@ -1,10 +1,14 @@
+import * as React from "react";
 import * as Mui from "@mui/material";
 import * as Faker from "faker";
+import * as ReactQuery from "react-query";
 import * as Components from "src/app/components";
-import * as Hooks from "src/app/hooks";
+import * as Contexts from "src/app/contexts";
 import * as Pages from "src/app/pages";
 
 export const Content = () => {
+  const isDataFetching = ReactQuery.useIsFetching("getNFTs");
+  const { setIsLoading } = React.useContext(Contexts.LoadingContext);
   const sampleArray = [...Array(10).keys()];
   const onSaleType = ["eth", "etc"];
   const ownerAddr = "0xfAE46f94Ee7B2Acb497CEcAFf6Cff17F621c693D";
@@ -14,16 +18,12 @@ export const Content = () => {
   ];
 
   const nftLists = Pages.Collections.Hooks.getNFTs({
-    contractAddr: contractAddrs[0],
+    ownerAddr,
   });
 
-  // const getNFT = Hooks.AlchemyInterect.Web3Provider.alchemy.getNfts({
-  //   owner: ownerAddr,
-  // });
-
-  // console.debug(getNFT);
-
-  console.log(nftLists);
+  React.useEffect(() => {
+    setIsLoading(!!isDataFetching);
+  }, [isDataFetching]);
 
   return (
     <Mui.Box>

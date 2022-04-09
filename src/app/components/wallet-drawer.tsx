@@ -1,26 +1,23 @@
 import React from "react";
 import * as Mui from "@mui/material";
-import * as Moralis from "react-moralis";
-// import * as Hooks from "src/app/hooks";
+import * as Hooks from "src/app/hooks";
 import * as Contexts from "src/app/contexts";
-import * as Constants from "src/constants";
 
 export const WalletDrawer = (props: Mui.DrawerProps) => {
-  // const { wallet, setWallet } = React.useContext(Contexts.WalletContext);
-  const { isAuthenticated, isAuthenticating, account } = Moralis.useMoralis();
-  // console.log(isAuthenticated, account, isAuthenticating);
-  // React.useEffect(() => {
-  //   Hooks.WalletInteractions.useWalledConnection("eth_accounts").then(
-  //     (result) => {
-  //       setWallet({
-  //         address: result?.address,
-  //         balance: result?.balance,
-  //       });
-  //     }
-  //   );
-  // }, []);
+  const [status, setStatus] = React.useState<string | undefined>("");
+  const { wallet, setWallet } = React.useContext(Contexts.WalletContext);
 
-  console.log(Constants.Config);
+  React.useEffect(() => {
+    Hooks.WalletInteractions.useWalledConnection("eth_accounts").then(
+      (result) => {
+        setWallet({
+          address: result?.address,
+          balance: result?.balance,
+        });
+        setStatus(result?.status);
+      }
+    );
+  }, []);
 
   return (
     <Mui.Drawer {...props}>
@@ -28,36 +25,19 @@ export const WalletDrawer = (props: Mui.DrawerProps) => {
         <Mui.Stack direction="row" alignItems="center" spacing={2}>
           <Mui.Typography variant="h6">My Wallet </Mui.Typography>
         </Mui.Stack>
-        <Mui.Stack alignItems="center" justifyContent="center" pt={3}>
-          {isAuthenticating ? (
-            <Mui.CircularProgress sx={{ m: 0 }} />
-          ) : isAuthenticated ? (
-            <ConnectedContainer />
-          ) : (
-            <NotConnectedContainer />
-          )}
-        </Mui.Stack>
+        {wallet?.address ? <ConnectedContainer /> : <NotConnectedContainer />}
       </Mui.Box>
     </Mui.Drawer>
   );
 };
 
 const ConnectedContainer = () => {
-  const { logout, account } = Moralis.useMoralis();
-  const { data: balance } = Moralis.useNativeBalance();
-  const HandleLogout = async () => {
-    await logout();
-  };
+  const { wallet, setWallet } = React.useContext(Contexts.WalletContext);
 
   return (
     <Mui.Box>
-      <Mui.Typography>Your wallet address is: {account}</Mui.Typography>
-      <Mui.Typography>
-        Your wallet balance is: {balance.formatted}
-      </Mui.Typography>
-      <Mui.Button onClick={HandleLogout} sx={{ mt: 2 }}>
-        Logout
-      </Mui.Button>
+      <Mui.Typography>Your wallet address is: {wallet?.address}</Mui.Typography>
+      <Mui.Typography>Your wallet balance is: {wallet?.balance}</Mui.Typography>
     </Mui.Box>
   );
 };
@@ -65,17 +45,15 @@ const ConnectedContainer = () => {
 const NotConnectedContainer = () => {
   const { setWallet } = React.useContext(Contexts.WalletContext);
 
-  const { authenticate } = Moralis.useMoralis();
-
-  const handleConnectWallet = async () => {
-    await authenticate({ signingMessage: "Log in using Moralis" })
-      .then(function (user) {
-        console.log("logged in user:", user);
-        console.log(user?.get("ethAddress"));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  const handleConnectWallet = () => {
+    Hooks.WalletInteractions.useWalledConnection("eth_requestAccounts").then(
+      (result) => {
+        setWallet({
+          address: result?.address,
+          balance: result?.balance,
+        });
+      }
+    );
   };
 
   return (
@@ -83,7 +61,7 @@ const NotConnectedContainer = () => {
       <Mui.Typography py={2}>
         Connect with one of our available wallet providers or create a new one.
       </Mui.Typography>
-      <Mui.Stack sx={{ width: "100%" }}>
+      <Mui.Stack>
         <Mui.List>
           <Mui.ListItem disablePadding>
             <Mui.ListItemButton

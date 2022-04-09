@@ -7,6 +7,7 @@ import * as Constants from "src/constants";
 
 export const Main = () => {
   const { darkMode } = React.useContext(Contexts.ThemeContext);
+  const { isLoading } = React.useContext(Contexts.LoadingContext);
   return (
     <Mui.Box
       sx={{
@@ -16,6 +17,15 @@ export const Main = () => {
         minHeight: "100vh",
       }}
     >
+      {isLoading && (
+        <Mui.LinearProgress
+          style={{ position: "absolute", top: 0, width: "100vw" }}
+        />
+      )}
+      <Mui.Backdrop
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      />
       <Layouts.Master.Views.AppBar />
       <Mui.Box p={2}>
         <Router.Outlet />

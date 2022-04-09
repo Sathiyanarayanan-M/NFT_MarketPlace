@@ -2,31 +2,32 @@ import * as ReactQuery from "react-query";
 import type * as Axios from "axios";
 import * as API from "src/app/api";
 
-export const getNFTs = ({ ownerAddr, contractAddr }: GetNFTs.GetNftParams) => {
+export const getNFTs = ({ ownerAddr }: GetNFTs.GetOwnerNftParams) => {
   return ReactQuery.useQuery<GetNFTs.UseQuery, Error>(["getNFTs"], () =>
-    API.MainnetAPI.get<GetNFTs.Response>(
-      ownerAddr
-        ? `getNFTs?owner=${ownerAddr}`
-        : `getNFTs?contractAddresses[]=${contractAddr}`
-    )
+    API.MainnetAPI.get<GetNFTs.Response>(`getNFTs?owner=${ownerAddr}`)
   ).data?.data;
 };
 
-export const getNFTCollections = ({ contractAddr }: GetNFTs.GetNftParams) => {
+export const getNFTCollections = ({
+  contractAddr,
+}: GetNFTs.GetContractNFTs) => {
   return ReactQuery.useQuery(["getNFTCollections"], () =>
     API.MainnetAPI.get(`getNFTsForCollection?contractAddress=${contractAddr}`)
   ).data?.data;
 };
 
-export const getNFTMetadata = ({ contractAddr }: GetNFTs.GetNftParams) => {
+export const getNFTMetadata = ({ contractAddr }: GetNFTs.GetContractNFTs) => {
   return ReactQuery.useQuery(["getNFTCollections"], () =>
     API.MainnetAPI.get(`getNFTsForCollection?contractAddress=${contractAddr}`)
   ).data?.data;
 };
 
 export namespace GetNFTs {
-  export interface GetNftParams {
+  export interface GetOwnerNftParams {
     ownerAddr?: string;
+  }
+
+  export interface GetContractNFTs {
     contractAddr?: string;
   }
   export interface Response {
