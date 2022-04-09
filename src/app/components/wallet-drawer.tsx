@@ -3,6 +3,7 @@ import * as Mui from "@mui/material";
 import * as Moralis from "react-moralis";
 // import * as Hooks from "src/app/hooks";
 import * as Contexts from "src/app/contexts";
+import * as Constants from "src/constants";
 
 export const WalletDrawer = (props: Mui.DrawerProps) => {
   // const { wallet, setWallet } = React.useContext(Contexts.WalletContext);
@@ -18,6 +19,8 @@ export const WalletDrawer = (props: Mui.DrawerProps) => {
   //     }
   //   );
   // }, []);
+
+  console.log(Constants.Config);
 
   return (
     <Mui.Drawer {...props}>
