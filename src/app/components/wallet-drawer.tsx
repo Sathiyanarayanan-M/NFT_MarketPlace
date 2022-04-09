@@ -71,7 +71,7 @@ const NotConnectedContainer = () => {
     await authenticate({ signingMessage: "Log in using Moralis" })
       .then(function (user) {
         console.log("logged in user:", user);
-        console.log(user!.get("ethAddress"));
+        console.log(user?.get("ethAddress"));
       })
       .catch(function (error) {
         console.log(error);

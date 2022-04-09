@@ -7,7 +7,7 @@ interface ReactChildren {
 interface Window {
     ethereum: any
 }
-interface ImportMetaEnv extends Readonly<Record<string, string>> {
+interface ImportMetaEnv {
     readonly VITE_CoinImageURI: string;
     readonly VITE_PINATA_KEY: string;
     readonly VITE_PINATA_SECRET: string;
@@ -22,3 +22,4 @@ interface ImportMetaEnv extends Readonly<Record<string, string>> {
 interface ImportMeta {
     readonly env: ImportMetaEnv;
 }
+
